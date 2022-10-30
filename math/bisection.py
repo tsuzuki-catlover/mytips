@@ -1,7 +1,10 @@
+from typing import Any, Union
+
 import numpy as np
+import numpy.typing as npt
 
 
-def is_monotone(equation, xmin, xmax, nsegment=100):
+def is_monotone(xmin: float, xmax: float, nsegment: int = 1000) -> int:
     x = np.linspace(xmin, xmax, nsegment)
     y = equation(x)
 
@@ -16,20 +19,23 @@ def is_monotone(equation, xmin, xmax, nsegment=100):
     return status
 
 
-def cross_zero(equation, xmin, xmax):
+def cross_zero(xmin: float, xmax: float) -> bool:
     if equation(xmin) * equation(xmax) < 0:
         return True
     else:
         return False
 
 
-def bisection(equation, xmin, xmax, epsilon=1e-8, max_iteration=1000):
+def bisection(xmin: float,
+              xmax: float,
+              epsilon: float = 1e-6,
+              max_iteration: int = 1000) -> float:
     # Check monotonicity
-    assert not is_monotone(equation, xmin, xmax) == 0,\
+    assert not is_monotone(xmin, xmax)==0,\
         'This function is not monotonic within the defined range.'
 
     # Check, if the function crosses zero
-    assert cross_zero(equation, xmin, xmax),\
+    assert cross_zero(xmin, xmax),\
         'No answer is expected in the region defined.'
 
     x0 = xmin
@@ -37,7 +43,7 @@ def bisection(equation, xmin, xmax, epsilon=1e-8, max_iteration=1000):
     n_iteration = 0
     while True:
         x2 = (x0 + x1) * 0.5
-        if cross_zero(equation, x0, x2):
+        if cross_zero(x0, x2):
             x1 = x2
         else:
             x0 = x2
@@ -48,7 +54,8 @@ def bisection(equation, xmin, xmax, epsilon=1e-8, max_iteration=1000):
     return x2
 
 
-def equation(x):
+def equation(x: Union[float, npt.NDArray[np.float16]]) \
+    -> Union[Any, npt.NDArray[np.float16]]:
     # Put an equation
     return x**2 - 100
 
@@ -56,5 +63,5 @@ def equation(x):
 if __name__ == '__main__':
     xmin = 0
     xmax = 50
-    ans = bisection(equation, xmin, xmax)
+    ans = bisection(xmin, xmax)
     print(ans)

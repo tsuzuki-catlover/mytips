@@ -2,9 +2,11 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 
 
-def imread(filename, flags=cv2.IMREAD_COLOR):
+def imread(filename: str, flags: int = cv2.IMREAD_COLOR) \
+    -> npt.NDArray[np.uint8]:
     """imread for path containing Japanese character."""
     assert Path(filename).exists(), '{} does not exist!'.format(filename)
 
@@ -14,10 +16,10 @@ def imread(filename, flags=cv2.IMREAD_COLOR):
     return img
 
 
-def imwrite(filename, img, params=None):
+def imwrite(filename: str, img: npt.NDArray[np.uint8]) -> None:
     """imwrite for path containing Japanese characters."""
     try:
-        _, img = cv2.imencode(Path(filename).suffix, img, params)
+        _, img = cv2.imencode(Path(filename).suffix, img, None)
     except cv2.error:
         print('The image cannot be encoded into {}!'.format(filename))
         exit(1)
