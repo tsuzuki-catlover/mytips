@@ -7,8 +7,8 @@ def sort_by_number(filelist, prefix, suffix):
 
 
 if __name__ == '__main__':
-    prefix = 'hoge'
-    suffix = 'fuga'
+    prefix = 'prefix'
+    suffix = '.dat'
     filelist = []
     for i in range(1000):
         filelist.append(prefix + str(i) + suffix)
